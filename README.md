@@ -8,6 +8,7 @@ An interactive web application that displays a full, scrollable and zoomable map
 - **Pin Placement**: Click anywhere on the map to place pins
 - **Custom Radius**: Set radius for each pin (in kilometers)
 - **Color Customization**: Choose colors for each pin and its radius area
+- **Pin Labels**: Add custom text labels to identify and organize pins
 - **Interactive Management**: Edit, move, and delete pins with intuitive controls
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 - **Keyboard Shortcuts**: Quick actions via keyboard commands
