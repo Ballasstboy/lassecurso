@@ -53,6 +53,19 @@ class GermanyMap {
             this.clearAllPins();
         });
 
+        // File management buttons
+        document.getElementById('download-map').addEventListener('click', () => {
+            this.downloadMapImage();
+        });
+
+        document.getElementById('save-config').addEventListener('click', () => {
+            this.saveConfiguration();
+        });
+
+        document.getElementById('load-config').addEventListener('change', (e) => {
+            this.loadConfiguration(e);
+        });
+
         // Modal event listeners
         this.setupModalEventListeners();
     }
@@ -237,13 +250,13 @@ class GermanyMap {
         return this.pins.find(p => p.id == pinId);
     }
 
-    clearAllPins() {
-        if (this.pins.length === 0) {
+    clearAllPins(showConfirmation = true) {
+        if (this.pins.length === 0 && showConfirmation) {
             alert('No pins to clear!');
             return;
         }
 
-        if (confirm(`Are you sure you want to remove all ${this.pins.length} pins?`)) {
+        if (!showConfirmation || confirm(`Are you sure you want to remove all ${this.pins.length} pins?`)) {
             // Remove all pins from map
             this.pins.forEach(pin => {
                 this.map.removeLayer(pin.marker);
@@ -300,6 +313,193 @@ class GermanyMap {
             this.updatePinPopup(lastPin);
         });
     }
+
+    // Download map as image
+    async downloadMapImage() {
+        try {
+            console.log('🖼️ Preparing map download...');
+            
+            // Show loading indicator
+            const downloadBtn = document.getElementById('download-map');
+            const originalText = downloadBtn.innerHTML;
+            downloadBtn.innerHTML = '⏳ Preparing...';
+            downloadBtn.disabled = true;
+
+            // Wait for map tiles to load
+            await this.waitForTilesToLoad();
+
+            // Create canvas from map
+            const mapContainer = document.getElementById('map');
+            const canvas = await this.mapToCanvas(mapContainer);
+            
+            // Download the image
+            const link = document.createElement('a');
+            link.download = `germany-map-${new Date().toISOString().split('T')[0]}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+
+            console.log('✅ Map image downloaded successfully!');
+            
+            // Reset button
+            downloadBtn.innerHTML = originalText;
+            downloadBtn.disabled = false;
+            
+        } catch (error) {
+            console.error('❌ Error downloading map:', error);
+            alert('Error downloading map. Please try again.');
+            
+            // Reset button
+            const downloadBtn = document.getElementById('download-map');
+            downloadBtn.innerHTML = '📷 Download Map';
+            downloadBtn.disabled = false;
+        }
+    }
+
+    // Convert map to canvas using html2canvas-like functionality
+    async mapToCanvas(element) {
+        // Use modern browser's native screenshot API if available
+        if (window.html2canvas) {
+            return await html2canvas(element, {
+                useCORS: true,
+                allowTaint: true,
+                scale: 1,
+                logging: false
+            });
+        } else {
+            // Fallback: Load html2canvas dynamically
+            await this.loadHtml2Canvas();
+            return await html2canvas(element, {
+                useCORS: true,
+                allowTaint: true,
+                scale: 1,
+                logging: false
+            });
+        }
+    }
+
+    // Load html2canvas library dynamically
+    loadHtml2Canvas() {
+        return new Promise((resolve, reject) => {
+            if (window.html2canvas) {
+                resolve();
+                return;
+            }
+
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    }
+
+    // Wait for map tiles to finish loading
+    waitForTilesToLoad() {
+        return new Promise((resolve) => {
+            // Simple timeout-based approach
+            // In production, you might want to listen to tile load events
+            setTimeout(resolve, 2000);
+        });
+    }
+
+    // Save current configuration to file
+    saveConfiguration() {
+        try {
+            const config = {
+                version: '1.0',
+                timestamp: new Date().toISOString(),
+                mapCenter: this.map.getCenter(),
+                mapZoom: this.map.getZoom(),
+                pins: this.exportPins(),
+                settings: {
+                    defaultRadius: this.defaultRadius,
+                    defaultColor: this.defaultColor
+                }
+            };
+
+            const dataStr = JSON.stringify(config, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `germany-map-config-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+
+            console.log('💾 Configuration saved:', config);
+            console.log(`📁 File: germany-map-config-${new Date().toISOString().split('T')[0]}.json`);
+            
+        } catch (error) {
+            console.error('❌ Error saving configuration:', error);
+            alert('Error saving configuration. Please try again.');
+        }
+    }
+
+    // Load configuration from file
+    loadConfiguration(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const config = JSON.parse(e.target.result);
+                
+                // Validate configuration
+                if (!this.validateConfiguration(config)) {
+                    alert('Invalid configuration file format.');
+                    return;
+                }
+
+                // Clear existing pins
+                this.clearAllPins(false); // false = don't show confirmation
+
+                // Restore map view
+                if (config.mapCenter && config.mapZoom) {
+                    this.map.setView([config.mapCenter.lat, config.mapCenter.lng], config.mapZoom);
+                }
+
+                // Restore settings
+                if (config.settings) {
+                    this.defaultRadius = config.settings.defaultRadius || 5;
+                    this.defaultColor = config.settings.defaultColor || '#3388ff';
+                    
+                    // Update UI
+                    document.getElementById('radius-input').value = this.defaultRadius;
+                    document.getElementById('color-input').value = this.defaultColor;
+                }
+
+                // Restore pins
+                if (config.pins && config.pins.length > 0) {
+                    this.importPins(config.pins);
+                }
+
+                console.log('📁 Configuration loaded successfully:', config);
+                console.log(`✅ Loaded ${config.pins ? config.pins.length : 0} pins`);
+                
+                // Show success message
+                alert(`Configuration loaded successfully!\nPins: ${config.pins ? config.pins.length : 0}\nDate: ${new Date(config.timestamp).toLocaleDateString()}`);
+                
+            } catch (error) {
+                console.error('❌ Error loading configuration:', error);
+                alert('Error loading configuration file. Please check the file format.');
+            }
+        };
+
+        reader.readAsText(file);
+        
+        // Reset file input
+        event.target.value = '';
+    }
+
+    // Validate configuration file format
+    validateConfiguration(config) {
+        return (
+            config &&
+            typeof config === 'object' &&
+            config.version &&
+            Array.isArray(config.pins)
+        );
+    }
 }
 
 // Initialize the application when the page loads
@@ -316,7 +516,15 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('💡 Available console commands:');
     console.log('   mapApp.exportPins() - Export all pins as JSON');
     console.log('   mapApp.importPins(data) - Import pins from JSON data');
+    console.log('   mapApp.saveConfiguration() - Save full configuration to file');
+    console.log('   mapApp.downloadMapImage() - Download map as PNG image');
     console.log('   mapApp.clearAllPins() - Remove all pins');
+    console.log('');
+    console.log('🎯 Keyboard shortcuts:');
+    console.log('   Ctrl/Cmd + S - Save configuration');
+    console.log('   Ctrl/Cmd + Shift + D - Download map image');
+    console.log('   Ctrl/Cmd + Shift + C - Clear all pins');
+    console.log('   Ctrl/Cmd + Shift + E - Export pins to clipboard');
 });
 
 // Handle page visibility changes to optimize performance
@@ -344,7 +552,7 @@ document.addEventListener('keydown', (e) => {
         }
     }
     
-    // Ctrl/Cmd + Shift + E to export pins
+    // Ctrl/Cmd + Shift + E to export pins (legacy)
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'E') {
         e.preventDefault();
         if (window.mapApp) {
@@ -355,6 +563,22 @@ document.addEventListener('keydown', (e) => {
                 navigator.clipboard.writeText(JSON.stringify(pins, null, 2));
                 console.log('📋 Pins copied to clipboard!');
             }
+        }
+    }
+    
+    // Ctrl/Cmd + S to save configuration
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (window.mapApp) {
+            window.mapApp.saveConfiguration();
+        }
+    }
+    
+    // Ctrl/Cmd + Shift + D to download map image
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        if (window.mapApp) {
+            window.mapApp.downloadMapImage();
         }
     }
 });

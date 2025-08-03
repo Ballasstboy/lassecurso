@@ -12,7 +12,8 @@ An interactive web application that displays a full, scrollable and zoomable map
 - **Interactive Management**: Edit, move, and delete pins with intuitive controls
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 - **Keyboard Shortcuts**: Quick actions via keyboard commands
-- **Data Export/Import**: Save and load pin configurations
+- **Map Download**: Export map with pins as high-quality PNG image
+- **Configuration Save/Load**: Save complete map setups and reload them later
 
 ## 🚀 Getting Started
 
@@ -66,7 +67,14 @@ No installation required! This is a client-side web application that runs entire
 - **Pin Counter**: Shows total number of pins placed
 - **Clear All**: Remove all pins at once (with confirmation)
 
+#### File Management
+- **Download Map**: Click "📷 Download Map" to save the current map view as a PNG image
+- **Save Configuration**: Click "💾 Save Config" to download a JSON file with all pins and settings
+- **Load Configuration**: Click "📁 Load Config" to restore a previously saved map setup
+
 #### Keyboard Shortcuts
+- `Ctrl/Cmd + S`: Save configuration to file
+- `Ctrl/Cmd + Shift + D`: Download map as image
 - `Ctrl/Cmd + Shift + C`: Clear all pins
 - `Ctrl/Cmd + Shift + E`: Export pins to console and clipboard
 - `Esc`: Close edit modal
@@ -80,6 +88,12 @@ mapApp.exportPins()
 
 // Import pins from JSON data
 mapApp.importPins(data)
+
+// Save complete configuration to file
+mapApp.saveConfiguration()
+
+// Download map as PNG image
+mapApp.downloadMapImage()
 
 // Clear all pins programmatically
 mapApp.clearAllPins()
@@ -136,6 +150,44 @@ The application adapts to different screen sizes:
 └── README.md           # This documentation
 ```
 
+## 💾 File Management
+
+### Map Download (PNG Image)
+- **Format**: High-quality PNG image
+- **Content**: Complete map view with all pins and radius circles
+- **Filename**: `germany-map-YYYY-MM-DD.png`
+- **Use Case**: Share visual maps, presentations, documentation
+
+### Configuration Files (JSON)
+- **Format**: Structured JSON data
+- **Content**: All pins, map view, settings, timestamp
+- **Filename**: `germany-map-config-YYYY-MM-DD.json`
+- **Use Case**: Backup, restore, share complete map setups
+
+#### Configuration File Structure:
+```json
+{
+  "version": "1.0",
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "mapCenter": { "lat": 51.1657, "lng": 10.4515 },
+  "mapZoom": 6,
+  "pins": [
+    {
+      "id": "unique-id",
+      "lat": 52.5200,
+      "lng": 13.4050,
+      "radius": 10,
+      "color": "#ff0000",
+      "label": "Berlin Office"
+    }
+  ],
+  "settings": {
+    "defaultRadius": 5,
+    "defaultColor": "#3388ff"
+  }
+}
+```
+
 ## 🎯 Use Cases
 
 - **Urban Planning**: Visualize service areas and coverage zones
@@ -143,6 +195,8 @@ The application adapts to different screen sizes:
 - **Event Planning**: Plan venues with radius considerations
 - **Research**: Mark locations of interest with coverage areas
 - **Education**: Teaching geography and spatial relationships
+- **Project Collaboration**: Share map configurations between team members
+- **Documentation**: Create visual reports with downloadable maps
 
 ## 🛠️ Customization Guide
 

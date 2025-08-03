@@ -26,6 +26,12 @@
                 <input type="color" id="color-input" value="#3388ff">
             </div>
             <button id="clear-all" class="btn btn-danger">Clear All Pins</button>
+            <div class="file-controls">
+                <button id="download-map" class="btn btn-primary">📷 Download Map</button>
+                <button id="save-config" class="btn btn-success">💾 Save Config</button>
+                <label for="load-config" class="btn btn-info">📁 Load Config</label>
+                <input type="file" id="load-config" accept=".json" style="display: none;">
+            </div>
             <div class="pin-count">Pins: <span id="pin-counter">0</span></div>
         </div>
         
@@ -38,6 +44,8 @@
                 <li><strong>Edit Pin:</strong> Click on an existing pin to modify radius, color, and label</li>
                 <li><strong>Label Pins:</strong> Add custom text labels in the edit modal</li>
                 <li><strong>Remove Pin:</strong> Use the delete button in the pin popup</li>
+                <li><strong>Download Map:</strong> Save map with pins as PNG image</li>
+                <li><strong>Save/Load:</strong> Export configuration to file or load previous maps</li>
                 <li><strong>Navigation:</strong> Zoom with mouse wheel, drag to pan</li>
             </ul>
         </div>

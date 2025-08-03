@@ -133,6 +133,37 @@ body {
     box-shadow: 0 4px 12px rgba(149, 165, 166, 0.3);
 }
 
+.file-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #229954, #1e8449);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #138496, #0f6674);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+}
+
 .pin-count {
     background: linear-gradient(135deg, #27ae60, #229954);
     color: white;
@@ -329,6 +360,11 @@ body {
     
     .modal-footer {
         flex-direction: column;
+    }
+    
+    .file-controls {
+        flex-direction: column;
+        width: 100%;
     }
     
     .btn {
