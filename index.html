@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Germany Interactive Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+          crossorigin=""/>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🇩🇪 Germany Interactive Map</h1>
+            <p>Click on the map to place pins with custom radius, colors, and labels</p>
+        </header>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="radius-input">Default Radius (km):</label>
+                <input type="number" id="radius-input" value="5" min="0.1" max="100" step="0.1">
+            </div>
+            <div class="control-group">
+                <label for="color-input">Default Color:</label>
+                <input type="color" id="color-input" value="#3388ff">
+            </div>
+            <button id="clear-all" class="btn btn-danger">Clear All Pins</button>
+            <div class="pin-count">Pins: <span id="pin-counter">0</span></div>
+        </div>
+        
+        <div id="map"></div>
+        
+        <div class="instructions">
+            <h3>Instructions:</h3>
+            <ul>
+                <li><strong>Add Pin:</strong> Click anywhere on the map</li>
+                <li><strong>Edit Pin:</strong> Click on an existing pin to modify radius, color, and label</li>
+                <li><strong>Label Pins:</strong> Add custom text labels in the edit modal</li>
+                <li><strong>Remove Pin:</strong> Use the delete button in the pin popup</li>
+                <li><strong>Navigation:</strong> Zoom with mouse wheel, drag to pan</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Pin Edit Modal -->
+    <div id="pin-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Pin</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="modal-radius">Radius (km):</label>
+                    <input type="number" id="modal-radius" min="0.1" max="100" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label for="modal-color">Color:</label>
+                    <input type="color" id="modal-color">
+                </div>
+                <div class="form-group">
+                    <label for="modal-label">Label (optional):</label>
+                    <input type="text" id="modal-label" maxlength="50" placeholder="Enter pin label">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-save" class="btn btn-primary">Save Changes</button>
+                <button id="modal-delete" class="btn btn-danger">Delete Pin</button>
+                <button id="modal-cancel" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+            crossorigin=""></script>
+    <script src="script.js"></script>
+</body>
+</html>
