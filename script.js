@@ -66,6 +66,28 @@ class GermanyMap {
             this.loadConfiguration(e);
         });
 
+        // Sidebar buttons
+        document.getElementById('sidebar-download-map').addEventListener('click', () => {
+            this.downloadMapImage();
+        });
+
+        document.getElementById('sidebar-save-config').addEventListener('click', () => {
+            this.saveConfiguration();
+        });
+
+        document.getElementById('sidebar-load-config').addEventListener('change', (e) => {
+            this.loadConfiguration(e);
+        });
+
+        document.getElementById('sidebar-clear-all').addEventListener('click', () => {
+            this.clearAllPins();
+        });
+
+        // Sidebar toggle
+        document.getElementById('sidebar-toggle').addEventListener('click', () => {
+            this.toggleSidebar();
+        });
+
         // Modal event listeners
         this.setupModalEventListeners();
     }
@@ -276,7 +298,31 @@ class GermanyMap {
     }
 
     updatePinCounter() {
-        document.getElementById('pin-counter').textContent = this.pins.length;
+        const count = this.pins.length;
+        document.getElementById('pin-counter').textContent = count;
+        document.getElementById('sidebar-pin-counter').textContent = count;
+    }
+
+    toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const toggle = document.getElementById('sidebar-toggle');
+        
+        sidebar.classList.toggle('collapsed');
+        
+        if (sidebar.classList.contains('collapsed')) {
+            toggle.textContent = '+';
+            console.log('📦 Sidebar collapsed');
+        } else {
+            toggle.textContent = '−';
+            console.log('📋 Sidebar expanded');
+        }
+        
+        // Refresh map size after sidebar toggle
+        setTimeout(() => {
+            if (this.map) {
+                this.map.invalidateSize();
+            }
+        }, 300);
     }
 
     // Utility methods for external access

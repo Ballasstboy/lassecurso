@@ -11,6 +11,7 @@ An interactive web application that displays a full, scrollable and zoomable map
 - **Pin Labels**: Add custom text labels to identify and organize pins
 - **Interactive Management**: Edit, move, and delete pins with intuitive controls
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Sidebar Controls**: Dedicated control panel for quick file operations
 - **Keyboard Shortcuts**: Quick actions via keyboard commands
 - **Map Download**: Export map with pins as high-quality PNG image
 - **Configuration Save/Load**: Save complete map setups and reload them later
@@ -67,7 +68,16 @@ No installation required! This is a client-side web application that runs entire
 - **Pin Counter**: Shows total number of pins placed
 - **Clear All**: Remove all pins at once (with confirmation)
 
-#### File Management
+#### Sidebar Controls
+The application features a dedicated sidebar for quick access to file operations:
+
+- **📷 Download Map**: Export current map view as high-quality PNG image
+- **💾 Save Config**: Download complete configuration as JSON file  
+- **📁 Upload JSON**: Restore previously saved map configurations
+- **🗑️ Clear All**: Remove all pins with confirmation
+- **Collapsible**: Click the toggle button (−/+) to expand/collapse sidebar
+
+#### File Management (Top Controls)
 - **Download Map**: Click "📷 Download Map" to save the current map view as a PNG image
 - **Save Configuration**: Click "💾 Save Config" to download a JSON file with all pins and settings
 - **Load Configuration**: Click "📁 Load Config" to restore a previously saved map setup
