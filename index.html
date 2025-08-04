@@ -1,129 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Germany Interactive Map</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
-          crossorigin=""/>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <header class="header">
-            <h1>🇩🇪 Germany Interactive Map</h1>
-            <p>Click on the map to place pins with custom radius, colors, and labels</p>
-        </header>
-        
-        <div class="controls">
-            <div class="control-group">
-                <label for="radius-input">Default Radius (km):</label>
-                <input type="number" id="radius-input" value="5" min="0.1" max="100" step="0.1">
-            </div>
-            <div class="control-group">
-                <label for="color-input">Default Color:</label>
-                <input type="color" id="color-input" value="#3388ff">
-            </div>
-            <button id="clear-all" class="btn btn-danger">Clear All Pins</button>
-            <div class="file-controls">
-                <button id="download-map" class="btn btn-primary">📷 Download Map</button>
-                <button id="save-config" class="btn btn-success">💾 Save Config</button>
-                <label for="load-config" class="btn btn-info">📁 Load Config</label>
-                <input type="file" id="load-config" accept=".json" style="display: none;">
-            </div>
-            <div class="pin-count">Pins: <span id="pin-counter">0</span></div>
-        </div>
-        
-        <div class="map-container">
-            <!-- Sidebar Controls -->
-            <div class="sidebar">
-                <div class="sidebar-header">
-                    <h3>🎛️ Control Panel</h3>
-                    <button id="sidebar-toggle" class="sidebar-toggle">−</button>
-                </div>
-                <div class="sidebar-content">
-                    <div class="sidebar-section">
-                    <h4>📁 File Management</h4>
-                    <button id="sidebar-download-map" class="sidebar-btn download-btn">
-                        <span class="btn-icon">📷</span>
-                        <span class="btn-text">Download Map</span>
-                    </button>
-                    <button id="sidebar-save-config" class="sidebar-btn save-btn">
-                        <span class="btn-icon">💾</span>
-                        <span class="btn-text">Save Config</span>
-                    </button>
-                    <label for="sidebar-load-config" class="sidebar-btn load-btn">
-                        <span class="btn-icon">📁</span>
-                        <span class="btn-text">Upload JSON</span>
-                    </label>
-                    <input type="file" id="sidebar-load-config" accept=".json" style="display: none;">
-                </div>
-                
-                <div class="sidebar-section">
-                    <h4>📍 Quick Actions</h4>
-                    <button id="sidebar-clear-all" class="sidebar-btn danger-btn">
-                        <span class="btn-icon">🗑️</span>
-                        <span class="btn-text">Clear All</span>
-                    </button>
-                    <div class="pin-info">
-                        <span class="pin-count-label">Total Pins:</span>
-                        <span id="sidebar-pin-counter" class="pin-count-number">0</span>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="map"></div>
-        </div>
-        
-        <div class="instructions">
-            <h3>Instructions:</h3>
-            <ul>
-                <li><strong>Add Pin:</strong> Click anywhere on the map</li>
-                <li><strong>Edit Pin:</strong> Click on an existing pin to modify radius, color, and label</li>
-                <li><strong>Label Pins:</strong> Add custom text labels in the edit modal</li>
-                <li><strong>Remove Pin:</strong> Use the delete button in the pin popup</li>
-                <li><strong>Sidebar Controls:</strong> Use the sidebar for quick file operations</li>
-                <li><strong>Upload JSON:</strong> Click "Upload JSON" to restore saved maps</li>
-                <li><strong>Download Map:</strong> Save current view as PNG image</li>
-                <li><strong>Navigation:</strong> Zoom with mouse wheel, drag to pan</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Pin Edit Modal -->
-    <div id="pin-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Edit Pin</h3>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="modal-radius">Radius (km):</label>
-                    <input type="number" id="modal-radius" min="0.1" max="100" step="0.1">
-                </div>
-                <div class="form-group">
-                    <label for="modal-color">Color:</label>
-                    <input type="color" id="modal-color">
-                </div>
-                <div class="form-group">
-                    <label for="modal-label">Label (optional):</label>
-                    <input type="text" id="modal-label" maxlength="50" placeholder="Enter pin label">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="modal-save" class="btn btn-primary">Save Changes</button>
-                <button id="modal-delete" class="btn btn-danger">Delete Pin</button>
-                <button id="modal-cancel" class="btn btn-secondary">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
-            crossorigin=""></script>
-    <script src="script.js"></script>
-</body>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Discover the best nightclubs and events in Rostock. Browse clubs, check event schedules, and find your perfect night out." />
+    <title>Rostock Nightlife - Best Clubs & Events</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
